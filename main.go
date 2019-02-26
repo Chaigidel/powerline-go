@@ -32,6 +32,7 @@ type segment struct {
 	priority            int
 	width               int
 	hideSeparators      bool
+	noEndingSpace       bool
 }
 
 type args struct {

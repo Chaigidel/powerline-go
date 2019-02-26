@@ -10,7 +10,6 @@ import (
 
 	"github.com/mattn/go-runewidth"
 	"golang.org/x/crypto/ssh/terminal"
-	"golang.org/x/text/width"
 )
 
 type ShellInfo struct {
@@ -210,28 +209,8 @@ func (p *powerline) truncateRow(rowNum int) {
 	p.Segments[rowNum] = row
 }
 
-func (p *powerline) numEastAsianRunes(segmentContent *string) int {
-	if *p.args.EastAsianWidth {
-		return 0
-	}
-	numEastAsianRunes := 0
-	for _, r := range *segmentContent {
-		switch width.LookupRune(r).Kind() {
-		case width.Neutral:
-		case width.EastAsianAmbiguous:
-			numEastAsianRunes += 1
-		case width.EastAsianWide:
-		case width.EastAsianNarrow:
-		case width.EastAsianFullwidth:
-		case width.EastAsianHalfwidth:
-		}
-	}
-	return numEastAsianRunes
-}
-
 func (p *powerline) drawRow(rowNum int, buffer *bytes.Buffer) {
 	row := p.Segments[rowNum]
-	numEastAsianRunes := 0
 
 	// Prepend padding
 	if p.isRightPrompt() {
@@ -272,8 +251,7 @@ func (p *powerline) drawRow(rowNum int, buffer *bytes.Buffer) {
 			buffer.WriteRune(' ')
 		}
 		buffer.WriteString(segment.content)
-		numEastAsianRunes += p.numEastAsianRunes(&segment.content)
-		if !*p.args.Condensed {
+		if !*p.args.Condensed && !segment.noEndingSpace {
 			buffer.WriteRune(' ')
 		}
 		if !p.isRightPrompt() {
@@ -287,13 +265,6 @@ func (p *powerline) drawRow(rowNum int, buffer *bytes.Buffer) {
 	// Append padding before cursor for left-aligned prompts
 	if !p.isRightPrompt() || !p.hasRightModules() {
 		buffer.WriteRune(' ')
-	}
-
-	// Don't append padding for right-aligned modules
-	if !p.isRightPrompt() {
-		for i := 0; i < numEastAsianRunes; i++ {
-			buffer.WriteRune(' ')
-		}
 	}
 }
 

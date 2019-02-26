@@ -127,9 +127,9 @@ var themes = map[string]Theme{
 		JobsBg: 238,
 
 		CmdPassedFg: 15,
-		CmdPassedBg: 236,
+		CmdPassedBg: 70,
 		CmdFailedFg: 15,
-		CmdFailedBg: 161,
+		CmdFailedBg: 9,
 
 		SvnChangesFg: 22, // dark green
 		SvnChangesBg: 148,
