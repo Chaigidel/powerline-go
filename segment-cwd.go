@@ -102,30 +102,43 @@ func cwdToPathSegments(p *powerline, cwd string) []pathSegment {
 
 	home, _ := os.LookupEnv("HOME")
 	if strings.HasPrefix(cwd, home) {
+		
+		// ~
+		if cwd == home {
+			pathSegments = append(pathSegments, pathSegment{
+				path: "~",
+				home: true,
+			})
+			return maybeAliasPathSegments(p, pathSegments)
+		}
+
+		// normal
+		cwd = cwd[len(home):]
+		names := strings.Split(strings.Trim(cwd, "/"), "/")
+		if names[0] == "" {
+			names = names[1:]
+		}
 		pathSegments = append(pathSegments, pathSegment{
-			path: "~",
+			path: names[len(names)-1],
 			home: true,
 		})
-		cwd = cwd[len(home):]
+		return maybeAliasPathSegments(p, pathSegments)
+
 	} else if cwd == "/" {
 		pathSegments = append(pathSegments, pathSegment{
 			path: "/",
 			root: true,
 		})
+		return maybeAliasPathSegments(p, pathSegments)
 	}
 
-	cwd = strings.Trim(cwd, "/")
-	names := strings.Split(cwd, "/")
+	names := strings.Split(strings.Trim(cwd, "/"), "/")
 	if names[0] == "" {
 		names = names[1:]
 	}
-
-	for _, name := range names {
-		pathSegments = append(pathSegments, pathSegment{
-			path: name,
-		})
-	}
-
+	pathSegments = append(pathSegments, pathSegment{
+		path: names[len(names)-1],
+	})
 	return maybeAliasPathSegments(p, pathSegments)
 }
 

@@ -82,15 +82,15 @@ var themes = map[string]Theme{
 		Reset: 0xFF,
 
 		UsernameFg:     250,
-		UsernameBg:     240,
+		UsernameBg:     0,
 		UsernameRootBg: 124,
 
 		HostnameFg: 250,
 		HostnameBg: 238,
 
 		HomeSpecialDisplay: true,
-		HomeFg:             15,  // white
-		HomeBg:             31,  // blueish
+		HomeFg:             0,  // white
+		HomeBg:             4,  // blueish
 		AliasFg:            15,  // white
 		AliasBg:            31,  // blueish
 		PathFg:             250, // light grey

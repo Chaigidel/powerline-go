@@ -181,10 +181,10 @@ func segmentGit(p *powerline) {
 		foreground: foreground,
 		background: background,
 	})
-	p.appendSegment("git-hint", segment{
-		content:    "不要忘记同步哦～",
-		foreground: p.theme.HomeFg,
-		background: p.theme.HomeBg,
-	})
+	// p.appendSegment("git-hint", segment{
+	// 	content:    "不要忘记同步哦～",
+	// 	foreground: p.theme.HomeFg,
+	// 	background: p.theme.HomeBg,
+	// })
 	stats.addToPowerline(p)
 }
